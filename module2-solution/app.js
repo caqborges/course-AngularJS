@@ -2,7 +2,6 @@
   'use strict';
 
 
-
 angular.module('ShoppingListCheckOff', [])
 .controller('ToBuyController', ToBuyController)
 .controller('AlreadyBoughtController',AlreadyBoughtController)
@@ -13,7 +12,6 @@ function ToBuyController(ShoppingListCheckOffService){
   var toBuyItems = this;
 
   toBuyItems.getItems = ShoppingListCheckOffService.getToBuyItems();
-  toBuyItems.isEmpty = ShoppingListCheckOffService.nothingToBuy();
 
   toBuyItems.buyItems = function(itemIndex){
     ShoppingListCheckOffService.buyItems(itemIndex);
@@ -28,8 +26,6 @@ function AlreadyBoughtController(ShoppingListCheckOffService){
 
   boughtItems.items = ShoppingListCheckOffService.getBoughtItems();
 
-  boughtItems.isEmpty = ShoppingListCheckOffService.nothingBoughtYet();
-
 }
 
 function ShoppingListCheckOffService(){
@@ -38,7 +34,7 @@ function ShoppingListCheckOffService(){
     //List with the products to buy
       var toBuyItems = [
       {name: "Cookies", quantity: 10},
-      {name: "Chips", quantity:5},
+      {name: "Chips", quantity: 5},
       {name: "Soda", quantity: 3},
       {name: "Tomatoes",quantity: 4},
       {name: "Napkins", quantity: 7}
@@ -48,8 +44,9 @@ function ShoppingListCheckOffService(){
   var boughtItems = [];
 
   service.buyItems = function(index){
-    var item = toBuyItems.splice(index,1); "Removes from this list";
-    boughtItems.push(item); //Add to the other list
+    boughtItems.push(toBuyItems[index]); //Add to the other list
+    toBuyItems.splice(index,1).name; //Removes from this list
+
   };
 
   service.getBoughtItems = function(){
@@ -58,14 +55,6 @@ function ShoppingListCheckOffService(){
 
   service.getToBuyItems = function(){
     return toBuyItems;
-  };
-
-  service.nothingBoughtYet = function (){  // Nothing was bought
-    return boughtItems.length <= 0;
-  };
-
-  service.nothingToBuy = function (){
-    return toBuyItems.length <= 0;
   };
 
 }
